@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ADHD Combined Type - 3 Mechanisms of Dysfunction</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700&family=DM+Serif+Display&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #0a0e17;
+    --card-bg: #111827;
+    --border: #1e293b;
+    --text: #e2e8f0;
+    --text-muted: #94a3b8;
+    --dopamine: #3b82f6;
+    --dopamine-glow: rgba(59, 130, 246, 0.15);
+    --norepinephrine: #f59e0b;
+    --norepinephrine-glow: rgba(245, 158, 11, 0.15);
+    --danger: #ef4444;
+    --danger-glow: rgba(239, 68, 68, 0.1);
+    --success: #10b981;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    padding: 20px;
+  }
+
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.8rem;
+    text-align: center;
+    margin-bottom: 6px;
+    background: linear-gradient(135deg, var(--dopamine), var(--norepinephrine));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .subtitle {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    margin-bottom: 30px;
+    font-weight: 300;
+  }
+
+  /* Neurotransmitter legend */
+  .legend {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    margin-bottom: 28px;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+
+  .legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+
+  .legend-dot.da { background: var(--dopamine); box-shadow: 0 0 6px var(--dopamine); }
+  .legend-dot.ne { background: var(--norepinephrine); box-shadow: 0 0 6px var(--norepinephrine); }
+
+  /* Mechanism cards */
+  .mechanism {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .mechanism::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+  }
+
+  .mechanism:nth-child(1)::before { background: linear-gradient(90deg, var(--danger), transparent); }
+  .mechanism:nth-child(2)::before { background: linear-gradient(90deg, var(--danger), transparent); }
+  .mechanism:nth-child(3)::before { background: linear-gradient(90deg, var(--danger), transparent); }
+
+  .mechanism-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+
+  .mechanism-number {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.6rem;
+    color: var(--danger);
+    opacity: 0.7;
+    min-width: 28px;
+  }
+
+  .mechanism-title {
+    font-size: 1.05rem;
+    font-weight: 600;
+  }
+
+  .mechanism-desc {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    padding-left: 42px;
+  }
+
+  /* Synapse diagrams */
+  .synapse-container {
+    display: flex;
+    gap: 16px;
+    padding-left: 42px;
+  }
+
+  .synapse-box {
+    flex: 1;
+    background: rgba(0,0,0,0.3);
+    border-radius: 12px;
+    padding: 16px;
+    position: relative;
+  }
+
+  .synapse-label {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+    text-align: center;
+  }
+
+  .synapse-visual {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    height: 120px;
+    position: relative;
+  }
+
+  /* Neurons */
+  .neuron {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.6rem;
+    font-weight: 600;
+    text-align: center;
+    line-height: 1.2;
+    flex-shrink: 0;
+    position: relative;
+  }
+
+  .neuron-a {
+    background: radial-gradient(circle at 30% 30%, #1e3a5f, #0f1f33);
+    border: 2px solid #2563eb44;
+  }
+
+  .neuron-b {
+    background: radial-gradient(circle at 30% 30%, #1e3a5f, #0f1f33);
+    border: 2px solid #2563eb44;
+  }
+
+  /* Synapse gap */
+  .synapse-gap {
+    flex: 1;
+    height: 80px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 60px;
+  }
+
+  .gap-label {
+    font-size: 0.55rem;
+    color: var(--text-muted);
+    opacity: 0.6;
+    position: absolute;
+    bottom: -2px;
+    white-space: nowrap;
+  }
+
+  /* Neurotransmitter dots */
+  .nt-dots {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .nt-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  .nt-dot.da {
+    background: var(--dopamine);
+    box-shadow: 0 0 4px var(--dopamine);
+  }
+
+  .nt-dot.ne {
+    background: var(--norepinephrine);
+    box-shadow: 0 0 4px var(--norepinephrine);
+  }
+
+  .nt-dot.faded {
+    opacity: 0.25;
+    animation: none;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(0.85); }
+  }
+
+  /* Receptors */
+  .receptors {
+    position: absolute;
+    left: -8px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .receptor {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+    border: 2px solid;
+    background: transparent;
+  }
+
+  .receptor.da { border-color: var(--dopamine); }
+  .receptor.ne { border-color: var(--norepinephrine); }
+  .receptor.missing { border-color: #333; border-style: dashed; opacity: 0.4; }
+
+  /* Reuptake arrows */
+  .reuptake-arrows {
+    position: absolute;
+    top: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 3px;
+  }
+
+  .reuptake-arrow {
+    color: var(--danger);
+    font-size: 0.7rem;
+    animation: suck 1s ease-in-out infinite;
+  }
+
+  .reuptake-arrow.fast {
+    animation: suck 0.4s ease-in-out infinite;
+  }
+
+  @keyframes suck {
+    0%, 100% { transform: translateX(0); opacity: 1; }
+    50% { transform: translateX(-6px); opacity: 0.5; }
+  }
+
+  /* Comparison labels */
+  .comparison {
+    display: flex;
+    gap: 16px;
+    padding-left: 42px;
+    margin-bottom: 8px;
+  }
+
+  .comp-label {
+    flex: 1;
+    text-align: center;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    padding: 4px;
+    border-radius: 6px;
+  }
+
+  .comp-label.typical {
+    color: var(--success);
+    background: rgba(16, 185, 129, 0.08);
+  }
+
+  .comp-label.adhd {
+    color: var(--danger);
+    background: var(--danger-glow);
+  }
+
+  /* Transporter pumps visual */
+  .pump {
+    position: absolute;
+    right: -6px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .pump-icon {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    background: var(--danger);
+    opacity: 0.6;
+    font-size: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+  }
+
+  .pump-icon.blocked {
+    background: var(--success);
+    opacity: 0.8;
+  }
+
+  .pump-icon.overactive {
+    animation: pumpfast 0.5s ease-in-out infinite;
+  }
+
+  @keyframes pumpfast {
+    0%, 100% { opacity: 0.9; }
+    50% { opacity: 0.3; }
+  }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.7rem;
+    margin-top: 28px;
+    opacity: 0.5;
+    font-style: italic;
+  }
+
+  /* Affects labels */
+  .affects {
+    display: flex;
+    gap: 8px;
+    padding-left: 42px;
+    margin-top: 12px;
+    flex-wrap: wrap;
+  }
+
+  .affect-tag {
+    font-size: 0.7rem;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-weight: 500;
+  }
+
+  .affect-tag.da {
+    background: var(--dopamine-glow);
+    color: var(--dopamine);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+  }
+
+  .affect-tag.ne {
+    background: var(--norepinephrine-glow);
+    color: var(--norepinephrine);
+    border: 1px solid rgba(245, 158, 11, 0.2);
+  }
+
+  @media (max-width: 600px) {
+    h1 { font-size: 1.4rem; }
+    .synapse-container { flex-direction: column; }
+    .comparison { flex-direction: column; gap: 4px; }
+    .mechanism { padding: 18px; }
+    .mechanism-desc { padding-left: 0; }
+    .synapse-container, .comparison, .affects { padding-left: 0; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <h1>ADHD Combined Type</h1>
+  <p class="subtitle">Three Mechanisms of Neurotransmitter Dysfunction</p>
+
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-dot da"></div>
+      Dopamine
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot ne"></div>
+      Norepinephrine
+    </div>
+  </div>
+
+  <!-- Mechanism 1: Overactive Reuptake -->
+  <div class="mechanism">
+    <div class="mechanism-header">
+      <div class="mechanism-number">1</div>
+      <div class="mechanism-title">Overactive Reuptake</div>
+    </div>
+    <div class="mechanism-desc">
+      Transporter pumps on the sending neuron (Neuron A) recycle neurotransmitters too aggressively. Dopamine and norepinephrine are pulled back out of the synapse before the signal fully reaches Neuron B. The message starts but never completes.
+    </div>
+
+    <div class="comparison">
+      <div class="comp-label typical">Neurotypical</div>
+      <div class="comp-label adhd">ADHD</div>
+    </div>
+
+    <div class="synapse-container">
+      <!-- Typical -->
+      <div class="synapse-box">
+        <div class="synapse-visual">
+          <div class="neuron neuron-a" style="font-size:0.55rem;">
+            Neuron A
+            <div class="pump">
+              <div class="pump-icon"></div>
+              <div class="pump-icon"></div>
+            </div>
+          </div>
+          <div class="synapse-gap">
+            <div class="nt-dots">
+              <div class="nt-dot da"></div>
+              <div class="nt-dot ne"></div>
+              <div class="nt-dot da"></div>
+              <div class="nt-dot ne"></div>
+              <div class="nt-dot da"></div>
+              <div class="nt-dot ne"></div>
+            </div>
+            <div class="gap-label">synapse</div>
+          </div>
+          <div class="neuron neuron-b" style="font-size:0.55rem;">
+            Neuron B
+            <div class="receptors">
+              <div class="receptor da"></div>
+              <div class="receptor ne"></div>
+              <div class="receptor da"></div>
+            </div>
+          </div>
+        </div>
+        <div class="synapse-label">Normal reuptake speed — signal completes</div>
+      </div>
+
+      <!-- ADHD -->
+      <div class="synapse-box">
+        <div class="synapse-visual">
+          <div class="neuron neuron-a" style="font-size:0.55rem;">
+            Neuron A
+            <div class="pump">
+              <div class="pump-icon overactive"></div>
+              <div class="pump-icon overactive"></div>
+              <div class="pump-icon overactive"></div>
+            </div>
+          </div>
+          <div class="synapse-gap">
+            <div class="reuptake-arrows">
+              <span class="reuptake-arrow fast">←</span>
+              <span class="reuptake-arrow fast">←</span>
+              <span class="reuptake-arrow fast">←</span>
+            </div>
+            <div class="nt-dots">
+              <div class="nt-dot da faded"></div>
+              <div class="nt-dot ne faded"></div>
+            </div>
+            <div class="gap-label">synapse</div>
+          </div>
+          <div class="neuron neuron-b" style="font-size:0.55rem;">
+            Neuron B
+            <div class="receptors">
+              <div class="receptor da"></div>
+              <div class="receptor ne"></div>
+              <div class="receptor da"></div>
+            </div>
+          </div>
+        </div>
+        <div class="synapse-label">Reuptake too fast — signal cut short</div>
+      </div>
+    </div>
+
+    <div class="affects">
+      <div class="affect-tag da">Dopamine: attention & motivation cut short</div>
+      <div class="affect-tag ne">Norepinephrine: arousal & impulse control disrupted</div>
+    </div>
+  </div>
+
+  <!-- Mechanism 2: Lower Baseline Supply -->
+  <div class="mechanism">
+    <div class="mechanism-header">
+      <div class="mechanism-number">2</div>
+      <div class="mechanism-title">Lower Baseline Availability</div>
+    </div>
+    <div class="mechanism-desc">
+      The sending neuron produces and releases less dopamine and norepinephrine to begin with. Even before reuptake clears it, the signal starts weaker. Less supply in the pool means less signal reaching the receiving neuron.
+    </div>
+
+    <div class="comparison">
+      <div class="comp-label typical">Neurotypical</div>
+      <div class="comp-label adhd">ADHD</div>
+    </div>
+
+    <div class="synapse-container">
+      <!-- Typical -->
+      <div class="synapse-box">
+        <div class="synapse-visual">
+          <div class="neuron neuron-a" style="font-size:0.55rem;">
+            Neuron A
+          </div>
+          <div class="synapse-gap">
+            <div class="nt-dots">
+              <div class="nt-dot da"></div>
+              <div class="nt-dot ne"></div>
+              <div class="nt-dot da"></div>
+              <div class="nt-dot ne"></div>
+              <div class="nt-dot da"></div>
+              <div class="nt-dot ne"></div>
+              <div class="nt-dot da"></div>
+              <div class="nt-dot ne"></div>
+            </div>
+            <div class="gap-label">synapse</div>
+          </div>
+          <div class="neuron neuron-b" style="font-size:0.55rem;">
+            Neuron B
+            <div class="receptors">
+              <div class="receptor da"></div>
+              <div class="receptor ne"></div>
+              <div class="receptor da"></div>
+            </div>
+          </div>
+        </div>
+        <div class="synapse-label">Full supply — strong signal</div>
+      </div>
+
+      <!-- ADHD -->
+      <div class="synapse-box">
+        <div class="synapse-visual">
+          <div class="neuron neuron-a" style="font-size:0.55rem;">
+            Neuron A
+          </div>
+          <div class="synapse-gap">
+            <div class="nt-dots">
+              <div class="nt-dot da faded"></div>
+              <div class="nt-dot ne faded"></div>
+              <div class="nt-dot da"></div>
+              <div class="nt-dot ne"></div>
+            </div>
+            <div class="gap-label">synapse</div>
+          </div>
+          <div class="neuron neuron-b" style="font-size:0.55rem;">
+            Neuron B
+            <div class="receptors">
+              <div class="receptor da"></div>
+              <div class="receptor ne"></div>
+              <div class="receptor da"></div>
+            </div>
+          </div>
+        </div>
+        <div class="synapse-label">Reduced supply — weaker signal</div>
+      </div>
+    </div>
+
+    <div class="affects">
+      <div class="affect-tag da">Dopamine: "this matters" signal starts weak</div>
+      <div class="affect-tag ne">Norepinephrine: alertness baseline is lower</div>
+    </div>
+  </div>
+
+  <!-- Mechanism 3: Receptor Insufficiency -->
+  <div class="mechanism">
+    <div class="mechanism-header">
+      <div class="mechanism-number">3</div>
+      <div class="mechanism-title">Receptor Insufficiency</div>
+    </div>
+    <div class="mechanism-desc">
+      Neuron B has fewer receptors or less sensitive receptors for dopamine and norepinephrine. Even when neurotransmitters are present in the synapse, the receiving neuron can't fully pick up the signal. The message arrives but nobody's home to answer.
+    </div>
+
+    <div class="comparison">
+      <div class="comp-label typical">Neurotypical</div>
+      <div class="comp-label adhd">ADHD</div>
+    </div>
+
+    <div class="synapse-container">
+      <!-- Typical -->
+      <div class="synapse-box">
+        <div class="synapse-visual">
+          <div class="neuron neuron-a" style="font-size:0.55rem;">
+            Neuron A
+          </div>
+          <div class="synapse-gap">
+            <div class="nt-dots">
+              <div class="nt-dot da"></div>
+              <div class="nt-dot ne"></div>
+              <div class="nt-dot da"></div>
+              <div class="nt-dot ne"></div>
+            </div>
+            <div class="gap-label">synapse</div>
+          </div>
+          <div class="neuron neuron-b" style="font-size:0.55rem;">
+            Neuron B
+            <div class="receptors">
+              <div class="receptor da"></div>
+              <div class="receptor ne"></div>
+              <div class="receptor da"></div>
+              <div class="receptor ne"></div>
+            </div>
+          </div>
+        </div>
+        <div class="synapse-label">Adequate receptors — signal received</div>
+      </div>
+
+      <!-- ADHD -->
+      <div class="synapse-box">
+        <div class="synapse-visual">
+          <div class="neuron neuron-a" style="font-size:0.55rem;">
+            Neuron A
+          </div>
+          <div class="synapse-gap">
+            <div class="nt-dots">
+              <div class="nt-dot da"></div>
+              <div class="nt-dot ne"></div>
+              <div class="nt-dot da"></div>
+              <div class="nt-dot ne"></div>
+            </div>
+            <div class="gap-label">synapse</div>
+          </div>
+          <div class="neuron neuron-b" style="font-size:0.55rem;">
+            Neuron B
+            <div class="receptors">
+              <div class="receptor missing"></div>
+              <div class="receptor da"></div>
+              <div class="receptor missing"></div>
+              <div class="receptor ne"></div>
+            </div>
+          </div>
+        </div>
+        <div class="synapse-label">Fewer or weaker receptors — signal lost</div>
+      </div>
+    </div>
+
+    <div class="affects">
+      <div class="affect-tag da">Dopamine: reward & motivation signals don't register fully</div>
+      <div class="affect-tag ne">Norepinephrine: arousal regulation less responsive</div>
+    </div>
+  </div>
+
+  <div class="footer">
+    These three mechanisms may be present in any combination and vary by individual.<br><br>
+    For educational purposes only — not a substitute for clinical evaluation.
+  </div>
+
+</div>
+</body>
+</html>
